@@ -11,8 +11,24 @@ spring:
   jpa:
     properties:
       hibernate:
-        format_sql: true
-
+	        format_sql: true
+cloud:
+  aws:
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID}
+      secret-key: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: ${AWS_S3_BUCKET_NAME}
+      
+kakao:
+  api:
+    key: ${KAKAO_MAP_API_KEY}
+    
+naver:
+  client:
+    id: ${NAVER_CLIENT_ID}
+    secret: ${NAVER_CLIENT_SECRET}
+    
 logging:
   level:
     root: INFO
