@@ -1,7 +1,7 @@
 spring:
   application:
     name: livin
-    
+  
   datasource:
     url: jdbc:mysql://${RDS_IP}:3306/efublivin?useSSL=false&useUnicode=true&characterEncoding=UTF8&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     username: ${RDS_USERNAME}
@@ -11,28 +11,29 @@ spring:
   jpa:
     properties:
       hibernate:
-	      format_sql: true
+        format_sql: true
+
 cloud:
   aws:
     region:
-	  static: ap-northeast-2
+      static: ap-northeast-2
     stack:
-	  auto: false
+      auto: false
     credentials:
-	  access-key: ${AWS_ACCESS_KEY_ID}
-	  secret-key: ${AWS_SECRET_ACCESS_KEY}
+       access-key: ${AWS_ACCESS_KEY_ID}
+       secret-key: ${AWS_SECRET_ACCESS_KEY}
     s3:
-	  bucket: ${AWS_S3_BUCKET_NAME}
-      
+      bucket: ${AWS_S3_BUCKET_NAME}
+
 kakao:
   map:
     kakao-api-key: ${KAKAO_MAP_API_KEY}
-    
+
 naver:
   search:
     naver-client-id: ${NAVER_CLIENT_ID}
     naver-client-secret: ${NAVER_CLIENT_SECRET}
-    
+
 logging:
   level:
     root: INFO
