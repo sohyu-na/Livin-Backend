@@ -54,4 +54,6 @@ tasks.named('test') {
 tasks.test {
     systemProperties System.getProperties()
 }
-
+tasks.withType(Test) {
+    systemProperty "spring.cloud.aws.s3.bucket", System.getProperty("AWS_S3_BUCKET_NAME")
+}
