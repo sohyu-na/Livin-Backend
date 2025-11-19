@@ -1,6 +1,6 @@
 package com.efub.livin.house.controller;
 
-import com.efub.livin.house.service.HouseSaveService;
+import com.efub.livin.house.service.HouseSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/kakao")
 public class HouseSaveController {
 
-    private final HouseSaveService houseSaveService;
+    private final HouseSyncService houseSaveService;
 
     @PostMapping(value = "/sync")
     public ResponseEntity<String> syncAndSave() {

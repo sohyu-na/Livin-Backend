@@ -15,7 +15,7 @@ import static com.efub.livin.house.domain.HouseType.PRIVATE;
 
 @Service
 @RequiredArgsConstructor
-public class HouseSaveService {
+public class HouseSyncService {
 
     private final KakaoApiClient kakaoApiClient;
     private final NaverApiClient naverApiClient;

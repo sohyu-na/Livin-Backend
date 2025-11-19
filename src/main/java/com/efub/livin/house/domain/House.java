@@ -1,10 +1,14 @@
 package com.efub.livin.house.domain;
 
 import com.efub.livin.house.dto.request.HouseCreateRequest;
+import com.efub.livin.review.domain.HouseReview;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -43,6 +47,8 @@ public class House {
     private int bookmarkCnt = 0;
 
     // 리뷰 관계 코드
+    @OneToMany(mappedBy = "house", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HouseReview> reviews = new ArrayList<>();
 
     // Document dto -> House 엔티티로 변환
     public static House from(Document dto, HouseType type, String imageUrl){

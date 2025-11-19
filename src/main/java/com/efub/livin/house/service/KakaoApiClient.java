@@ -26,6 +26,7 @@ public class KakaoApiClient {
 
     private static final String KEYWORD_API_URL = "https://dapi.kakao.com/v2/local/search/keyword.json";
     private static final String ADDRESS_API_URL = "https://dapi.kakao.com/v2/local/search/address.json";
+    private static final String CATEGORY_API_URL = "https://dapi.kakao.com/v2/local/search/category.json";
 
     // 키워드로 장소 검색
     public KakaoResponseDto searchByKeyword(String keyword) {
@@ -43,10 +44,7 @@ public class KakaoApiClient {
         params.put("radius", radius);
 
         // Header 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+        HttpEntity<String> entity = createAuthHeaders();
 
         // Kakao API 호출
         ResponseEntity<KakaoResponseDto> response = restTemplate.exchange(
@@ -64,9 +62,7 @@ public class KakaoApiClient {
     // 주소로 좌표 검색
     public KakaoResponseDto searchAddress(String address) {
         // 헤더 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+        HttpEntity<String> entity = createAuthHeaders();
 
         // URI 템플릿 설정
         String url = ADDRESS_API_URL + "?query={query}";
@@ -93,5 +89,48 @@ public class KakaoApiClient {
             log.error("Kakao 주소 검색 API 호출 오류: {}", e.getMessage());
             throw new CustomException(ErrorCode.KAKAO_API_ERROR);
         }
+    }
+
+    // 카테고리로 poi 검색
+    public KakaoResponseDto searchPoiByCategory(String categoryCode, double x, double y, int radius){
+        // URI 템플릿 설정
+        String url = CATEGORY_API_URL + "?category_group_code={code}&x={x}&y={y}&radius={radius}&sort=distance";
+        Map<String, Object> params = new HashMap<>();
+        params.put("code", categoryCode);
+        params.put("x", String.valueOf(x));
+        params.put("y", String.valueOf(y));
+        params.put("radius", radius);
+
+        // 해더 설정
+        HttpEntity<String> entity = createAuthHeaders();
+
+        // API 호출
+        try {
+            ResponseEntity<KakaoResponseDto> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    KakaoResponseDto.class,
+                    params
+            );
+
+            if (response.getBody() == null) {
+                throw new CustomException(ErrorCode.KAKAO_API_EMPTY_RESPONSE);
+            }
+            return response.getBody();
+
+        } catch (Exception e) {
+            log.error("Kakao 카테고리 검색 API 호출 오류: {}", e.getMessage());
+            throw new CustomException(ErrorCode.KAKAO_API_ERROR);
+        }
+    }
+
+    /**
+     * Kakao 인증 헤더 생성
+     * */
+    private HttpEntity<String> createAuthHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
+        return new HttpEntity<>(headers);
     }
 }

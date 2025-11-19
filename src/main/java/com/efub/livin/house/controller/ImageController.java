@@ -1,6 +1,6 @@
 package com.efub.livin.house.controller;
 
-import com.efub.livin.house.service.ImageService;
+import com.efub.livin.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.io.IOException;
 @RequestMapping("/house/image")
 public class ImageController {
 
-    private final ImageService imageService;
+    private final S3Service imageService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {

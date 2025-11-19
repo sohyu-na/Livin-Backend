@@ -1,11 +1,15 @@
 package com.efub.livin.review.domain;
 
 import com.efub.livin.global.domain.BaseEntity;
+import com.efub.livin.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,7 +32,7 @@ public class DormReview extends BaseEntity {
     @Column(nullable = false)
     private String roomPeople;
 
-    //FK : user_id
+//    //FK : user_id
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id", updatable = false, nullable = false)
 //    private User user;
@@ -65,6 +69,10 @@ public class DormReview extends BaseEntity {
     @Column(nullable = false)
     private Boolean anonym;
 
+    //리뷰 이미지 리스트
+    @OneToMany(mappedBy = "dormReview", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewImage> images = new ArrayList<>();
+
     @Builder
     public DormReview(
             String buildName,
@@ -88,6 +96,12 @@ public class DormReview extends BaseEntity {
         this.finalRate = finalRate;
         this.review = review;
         this.anonym = anonym;
+    }
+
+    //이미지 추가하는 메서드
+    public void addImage(ReviewImage image) {
+        images.add(image);
+        image.setDormReview(this);
     }
 
 }

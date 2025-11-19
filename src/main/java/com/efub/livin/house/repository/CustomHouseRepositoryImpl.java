@@ -22,7 +22,7 @@ public class CustomHouseRepositoryImpl implements CustomHouseRepository {
     public Page<House> search(
             String keyword, // null 가능
             String sort,    // review(default), bookmark
-            String type,    // all(default), private, boarding
+            HouseType houseType,
             String address, // all(default), 서대문구, 마포구...
             Pageable pageable) {
         QHouse house = QHouse.house;
@@ -34,7 +34,6 @@ public class CustomHouseRepositoryImpl implements CustomHouseRepository {
             builder.and(house.buildingName.contains(keyword));
         }
         // 전체/자취/하숙 필터링
-        HouseType houseType = parseHouseType(type);
         if(houseType != null){
             builder.and(house.type.eq(houseType));
         }
@@ -70,20 +69,24 @@ public class CustomHouseRepositoryImpl implements CustomHouseRepository {
         return new PageImpl<>(content, pageable, totalCount);
     }
 
-    private HouseType parseHouseType(String type) {
-        if (type == null || type.equalsIgnoreCase("all")) {
-            return null; // 전체 조회
+    @Override
+    public List<House> findInBounds(double minLat, double maxLat, double minLon, double maxLon,
+                                    HouseType houseType) {
+        QHouse house = QHouse.house;
+
+        BooleanBuilder builder = new BooleanBuilder()
+                .and(house.lat.castToNum(Double.class).between(minLat, maxLat))
+                .and(house.lon.castToNum(Double.class).between(minLon, maxLon));
+
+        // 자취/하숙/전체
+        if(houseType != null){
+            builder.and(house.type.eq(houseType));
         }
 
-        if (type.equalsIgnoreCase("private")) {
-            return HouseType.PRIVATE;
-        }
-
-        if (type.equalsIgnoreCase("boarding")) {
-            return HouseType.BOARDING;
-        }
-
-        return null;
+        return queryFactory
+                .selectFrom(house)
+                .where(builder)
+                .fetch();
     }
 
     private boolean hasText(String value) {
