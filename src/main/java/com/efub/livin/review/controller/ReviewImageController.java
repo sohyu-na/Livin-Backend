@@ -1,7 +1,6 @@
 package com.efub.livin.review.controller;
 
 import com.efub.livin.global.s3.S3Service;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
