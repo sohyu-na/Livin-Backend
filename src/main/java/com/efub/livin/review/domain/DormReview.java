@@ -17,7 +17,7 @@ import java.util.List;
 public class DormReview extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  //sql에서 ALTER TABLE dorm_review AUTO_INCREMENT = 10000; 과정 필요
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // 기숙사 이름
@@ -32,10 +32,10 @@ public class DormReview extends BaseEntity {
     @Column(nullable = false)
     private String roomPeople;
 
-    //FK : user_id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", updatable = false, nullable = false)
-    private User user;
+//    //FK : user_id
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", updatable = false, nullable = false)
+//    private User user;
 
     // 시설 평가
     @Enumerated(EnumType.STRING)
@@ -84,8 +84,7 @@ public class DormReview extends BaseEntity {
             BugRate bugRate,
             Integer finalRate,
             String review,
-            Boolean anonym,
-            User user
+            Boolean anonym
     ) {
         this.buildName = buildName;
         this.buildNum = buildNum;
@@ -97,7 +96,6 @@ public class DormReview extends BaseEntity {
         this.finalRate = finalRate;
         this.review = review;
         this.anonym = anonym;
-        this.user = user;
     }
 
     //이미지 추가하는 메서드

@@ -21,7 +21,6 @@ public class DormReviewDetailResponseDto {
     private BugRate bugRate;
     private AccessRate accessRate;
     private List<String> imageUrls;
-    private String nickname;
 
     public static DormReviewDetailResponseDto from(DormReview review) {
         return DormReviewDetailResponseDto.builder()
@@ -35,9 +34,6 @@ public class DormReviewDetailResponseDto {
                 .accessRate(review.getAccessRate())
                 .soundRate(review.getSoundRate())
                 .bugRate(review.getBugRate())
-                .nickname(review.getAnonym() != null && review.getAnonym()
-                        ? "익명"
-                        : review.getUser().getNickname())
                 .imageUrls(
                         review.getImages().stream()
                                 .map(ReviewImage::getImagePath)

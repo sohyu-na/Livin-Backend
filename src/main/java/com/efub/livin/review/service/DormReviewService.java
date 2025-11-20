@@ -8,8 +8,6 @@ import com.efub.livin.review.dto.request.DormReviewCreateRequestDto;
 import com.efub.livin.review.dto.response.DormReviewDetailResponseDto;
 import com.efub.livin.review.dto.response.DormReviewListResponseDto;
 import com.efub.livin.review.repository.DormReviewRepository;
-import com.efub.livin.user.domain.User;
-import com.efub.livin.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +19,11 @@ import java.util.*;
 public class DormReviewService {
 
     private final DormReviewRepository dormReviewRepository;
-    private final UserRepository userRepository;
 
     // 리뷰 생성
     @Transactional
-    public long createDormReview(DormReviewCreateRequestDto request, Long userId){
-
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-        DormReview review = request.toEntity(user);
+    public long createDormReview(DormReviewCreateRequestDto request){
+        DormReview review = request.toEntity();
 
         //이미지가 있다면 엔티티와 연결
         if(request.getImageUrls() != null) {
@@ -68,14 +62,9 @@ public class DormReviewService {
 
     //리뷰 삭제
     @Transactional
-    public void deleteDormReview(Long id, Long loginUserId){
+    public void deleteDormReview(Long id){
         DormReview review = dormReviewRepository.findById(id)
                 .orElseThrow(()-> new CustomException(ErrorCode.DORM_REVIEW_NOT_FOUND));
-
-        //권한 체크
-        if(!review.getUser().getUserId().equals(loginUserId)){
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
-        }
 
         dormReviewRepository.delete(review);
 

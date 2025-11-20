@@ -2,7 +2,6 @@ package com.efub.livin.review.service;
 
 import com.efub.livin.global.exception.CustomException;
 import com.efub.livin.global.exception.ErrorCode;
-import com.efub.livin.global.s3.S3Service;
 import com.efub.livin.house.domain.House;
 import com.efub.livin.house.repository.HouseSaveRepository;
 import com.efub.livin.review.domain.HouseReview;
@@ -11,8 +10,6 @@ import com.efub.livin.review.dto.request.HouseReviewCreateRequestDto;
 import com.efub.livin.review.dto.response.HouseReviewDetailResponseDto;
 import com.efub.livin.review.dto.response.HouseReviewListResponseDto;
 import com.efub.livin.review.repository.HouseReviewRepository;
-import com.efub.livin.user.domain.User;
-import com.efub.livin.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,19 +21,14 @@ import java.util.List;
 public class HouseReviewService {
     private final HouseReviewRepository houseReviewRepository;
     private final HouseSaveRepository houseSaveRepository;
-    private final UserRepository userRepository;
 
     //리뷰 생성
     @Transactional
-    public Long createHouseReview(Long houseId, HouseReviewCreateRequestDto request,
-                                  Long loginUserId){
+    public Long createHouseReview(Long houseId, HouseReviewCreateRequestDto request){
         House house = houseSaveRepository.findById(houseId)
                 .orElseThrow(()-> new CustomException(ErrorCode.HOUSE_NOT_FOUND));
 
-        User user = userRepository.findById(loginUserId)
-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        HouseReview review = request.toEntitiy(house , user);
+        HouseReview review = request.toEntitiy(house);
 
         if(request.getImageUrls() != null){
             request.getImageUrls().forEach(url -> {
@@ -68,14 +60,9 @@ public class HouseReviewService {
 
     //리뷰 삭제
     @Transactional
-    public void deleteHouseReview(Long id, Long loginUserId){
+    public void deleteHouseReview(Long id){
         HouseReview review = houseReviewRepository.findById(id)
                 .orElseThrow(()-> new CustomException(ErrorCode.HOUSE_REVIEW_NOT_FOUND));
-
-        //권한 체크
-        if(!review.getUser().getUserId().equals(loginUserId)){
-            throw new CustomException(ErrorCode.ACCESS_DENIED);
-        }
         houseReviewRepository.delete(review);
     }
 }

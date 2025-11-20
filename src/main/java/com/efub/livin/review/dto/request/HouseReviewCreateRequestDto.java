@@ -2,7 +2,6 @@ package com.efub.livin.review.dto.request;
 
 import com.efub.livin.house.domain.House;
 import com.efub.livin.review.domain.*;
-import com.efub.livin.user.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +20,7 @@ public class HouseReviewCreateRequestDto {
     private Boolean anonym;
     private List<String> imageUrls;
 
-    public HouseReview toEntitiy(House house, User user){
+    public HouseReview toEntitiy(House house){
         return HouseReview.builder()
                 .house(house)
                 .facilityRate(facilityRate)
@@ -31,7 +30,6 @@ public class HouseReviewCreateRequestDto {
                 .finalRate(finalRate)
                 .review(review)
                 .anonym(anonym)
-                .user(user)
                 .build();
     }
 

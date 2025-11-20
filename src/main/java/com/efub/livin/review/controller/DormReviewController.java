@@ -1,13 +1,11 @@
 package com.efub.livin.review.controller;
 
-import com.efub.livin.auth.domain.CustomUserDetails;
 import com.efub.livin.review.dto.request.DormReviewCreateRequestDto;
 import com.efub.livin.review.dto.response.DormReviewDetailResponseDto;
 import com.efub.livin.review.dto.response.DormReviewListResponseDto;
 import com.efub.livin.review.service.DormReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +20,9 @@ public class DormReviewController {
     // 리뷰 생성
     @PostMapping
     public ResponseEntity<Long> createDormReview(
-            @RequestBody DormReviewCreateRequestDto request,
-            @AuthenticationPrincipal CustomUserDetails userDetails
+            @RequestBody DormReviewCreateRequestDto request
             ) {
-        Long id = dormReviewService.createDormReview(request, userDetails.getUserId());
+        Long id = dormReviewService.createDormReview(request);
         return ResponseEntity.ok(id);
     }
 
@@ -51,12 +48,8 @@ public class DormReviewController {
 
     //리뷰 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDormReview(
-            @PathVariable Long id,
-            @AuthenticationPrincipal CustomUserDetails userDetails){
-
-        Long loginUserId = userDetails.getUserId();
-        dormReviewService.deleteDormReview(id, loginUserId);
+    public ResponseEntity<Void> deleteDormReview(@PathVariable Long id){
+        dormReviewService.deleteDormReview(id);
         return ResponseEntity.noContent().build();
     }
 }

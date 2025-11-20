@@ -1,13 +1,11 @@
 package com.efub.livin.review.controller;
 
-import com.efub.livin.auth.domain.CustomUserDetails;
 import com.efub.livin.review.dto.request.HouseReviewCreateRequestDto;
 import com.efub.livin.review.dto.response.HouseReviewDetailResponseDto;
 import com.efub.livin.review.dto.response.HouseReviewListResponseDto;
 import com.efub.livin.review.service.HouseReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +20,8 @@ public class HouseReviewController {
     //리뷰 생성
     @PostMapping("{houseId}/review")
     public ResponseEntity<Long> createHouseReview(@PathVariable Long houseId,
-                                                  @RequestBody HouseReviewCreateRequestDto request,
-                                                  @AuthenticationPrincipal CustomUserDetails userDetails){
-        Long id = houseReviewService.createHouseReview(houseId, request, userDetails.getUserId());
+                                                  @RequestBody HouseReviewCreateRequestDto request){
+        Long id = houseReviewService.createHouseReview(houseId, request);
         return ResponseEntity.ok(id);
     }
 
@@ -47,10 +44,8 @@ public class HouseReviewController {
     //리뷰 삭제
     @DeleteMapping("{houseId}/review/{reviewId}")
     public ResponseEntity<Void> deleteHouseReview(@PathVariable Long houseId,
-                                                  @PathVariable Long reviewId,
-                                                  @AuthenticationPrincipal CustomUserDetails userDetails){
-        Long loginUserId = userDetails.getUserId();
-        houseReviewService.deleteHouseReview(reviewId , loginUserId);
+                                                  @PathVariable Long reviewId){
+        houseReviewService.deleteHouseReview(reviewId);
         return ResponseEntity.noContent().build();
     }
 }
