@@ -1,6 +1,8 @@
 package com.efub.livin.house.controller;
 
+import com.efub.livin.auth.domain.CustomUserDetails;
 import com.efub.livin.house.dto.request.HouseCreateRequest;
+import com.efub.livin.bookmark.dto.response.BookmarkResponse;
 import com.efub.livin.house.dto.response.HousePagingListResponse;
 import com.efub.livin.house.dto.response.HouseResponse;
 import com.efub.livin.house.dto.response.MapDataResponse;
@@ -9,7 +11,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,16 +26,18 @@ public class HouseController {
     // 새 자취/하숙 생성 컨트롤러
     @PostMapping(value = "/new")
     public ResponseEntity<HouseResponse> save(
-            @Valid @RequestBody HouseCreateRequest request) {
+            @Valid @RequestBody HouseCreateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        HouseResponse response = houseService.addHouse(request);
+        HouseResponse response = houseService.addHouse(request, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // 자취/하숙 상세 조회 컨트롤러
     @GetMapping(value = "/{houseId}")
-    public ResponseEntity<HouseResponse> getOneHouse(@PathVariable Long houseId) {
-        HouseResponse response = houseService.getHouse(houseId);
+    public ResponseEntity<HouseResponse> getOneHouse(@PathVariable Long houseId,
+                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
+        HouseResponse response = houseService.getHouse(houseId, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -42,9 +49,10 @@ public class HouseController {
             @RequestParam(value = "sort") String sort,
             @RequestParam(value = "type") String type,
             @RequestParam(value = "address") String address,
-            @RequestParam(value = "page") int page
+            @RequestParam(value = "page") int page,
+            @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        HousePagingListResponse response = houseService.search(keyword, sort, type, address, page);
+        HousePagingListResponse response = houseService.search(keyword, sort, type, address, page, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -53,7 +61,7 @@ public class HouseController {
      * &centerLat=1127693.125&centerLon=487873.75&radius=538.697
      * &showCafe=true&showFood=true
      */
-    @GetMapping("/map")
+    @GetMapping(value = "/map")
     public MapDataResponse getMap(
             @RequestParam(value = "minLat") double minLat,
             @RequestParam(value = "maxLat") double maxLat,

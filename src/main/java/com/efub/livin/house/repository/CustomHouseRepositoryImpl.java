@@ -1,8 +1,10 @@
 package com.efub.livin.house.repository;
 
+import com.efub.livin.bookmark.domain.QBookmark;
 import com.efub.livin.house.domain.House;
 import com.efub.livin.house.domain.HouseType;
 import com.efub.livin.house.domain.QHouse;
+import com.efub.livin.user.domain.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -86,6 +88,20 @@ public class CustomHouseRepositoryImpl implements CustomHouseRepository {
         return queryFactory
                 .selectFrom(house)
                 .where(builder)
+                .fetch();
+    }
+
+    @Override
+    public List<House> findByMyBookmark(User user) {
+        QHouse house = QHouse.house;
+        QBookmark bookmark = QBookmark.bookmark;
+
+        return queryFactory
+                .select(house)
+                .from(bookmark)
+                .join(bookmark.house, house)
+                .where(bookmark.user.eq(user))
+                .orderBy(bookmark.id.desc())
                 .fetch();
     }
 

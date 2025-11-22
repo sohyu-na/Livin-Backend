@@ -37,6 +37,11 @@ public class HouseSyncService {
             }
 
             for(Document document : documents){
+
+                // 이미 존재하는 집이면 넘김
+                if (houseSaveRepository.existsByAddress(document.getAddress_name())){
+                    continue;
+                }
                 HouseType type;
                 String imageUrl = null;
 
@@ -59,7 +64,16 @@ public class HouseSyncService {
                     type = BOARDING;
                 }
                 // House 엔티티로 변환
-                House house = House.from(document, type, imageUrl);
+                House house = House.builder()
+                        .buildingName(document.getPlace_name())
+                        .address(document.getAddress_name())
+                        .phone(document.getPhone())
+                        .lon(document.getX())
+                        .lat(document.getY())
+                        .docId(document.getId())
+                        .type(type)
+                        .imageUrl(imageUrl) // 네이버에서 가져온 이미지
+                        .build();
 
                 // DB에 저장
                 houseSaveRepository.save(house);

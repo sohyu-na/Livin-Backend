@@ -2,6 +2,7 @@ package com.efub.livin.house.repository;
 
 import com.efub.livin.house.domain.House;
 import com.efub.livin.house.domain.HouseType;
+import com.efub.livin.user.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,4 +14,7 @@ public interface CustomHouseRepository {
 
     // 지도 중심 범위 기준 자취/하숙 리스트
     List<House> findInBounds(double minLat, double maxLat, double minLon, double maxLon, HouseType houseType);
+
+    // 본인이 북마크한 자취/하숙 리스트
+    List<House> findByMyBookmark(User user);
 }
