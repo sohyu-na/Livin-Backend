@@ -36,13 +36,13 @@ public class HouseService {
 
     // 새 자취/하숙 정보 등록
     @Transactional
-    public HouseResponse addHouse(HouseCreateRequest request) {
+    public HouseResponse addHouse(HouseCreateRequest request, User user) {
 
         // 주소 -> 좌표 변환
         Document doc = kakaoApiClient.searchAddress(request.getAddress()).getDocuments().get(0);
 
         // House 저장
-        House house = House.create(request, doc.getX(), doc.getY());
+        House house = request.toEntity(doc.getX(), doc.getY());
         House savedHouse = houseRepository.save(house);
 
         return HouseResponse.from(savedHouse);

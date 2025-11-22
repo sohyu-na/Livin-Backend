@@ -2,6 +2,7 @@ package com.efub.livin.global.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -21,6 +22,9 @@ public enum ErrorCode {
     KAKAO_API_ERROR(500, "카카오 API 연동 중 오류가 발생했습니다."),
     KAKAO_API_EMPTY_RESPONSE(500, "카카오 API로부터 빈 응답을 받았습니다."),
     HOUSE_NOT_FOUND(404, "해당 하숙/자취 건물을 찾을 수 없습니다."),
+    FILE_NOT_FOUND(500, "지정된 경로에서 CSV 파일을 찾을 수 없습니다."),
+    FILE_READ_ERROR(500, "CSV 파일을 읽는 도중 오류가 발생했습니다."),
+    DATA_PARSING_ERROR(500, "데이터 파싱 중 오류가 발생했습니다."),
 
     //리뷰 관련
     HOUSE_REVIEW_NOT_FOUND(404, "해당 자취/하숙 리뷰를 찾을 수 없습니다."),

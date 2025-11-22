@@ -26,9 +26,10 @@ public class HouseController {
     // 새 자취/하숙 생성 컨트롤러
     @PostMapping(value = "/new")
     public ResponseEntity<HouseResponse> save(
-            @Valid @RequestBody HouseCreateRequest request) {
+            @Valid @RequestBody HouseCreateRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        HouseResponse response = houseService.addHouse(request);
+        HouseResponse response = houseService.addHouse(request, userDetails.getUser());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
