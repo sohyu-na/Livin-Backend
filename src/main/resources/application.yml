@@ -49,6 +49,10 @@ naver:
   search:
     naver-client-id: ${NAVER_CLIENT_ID}
     naver-client-secret: ${NAVER_CLIENT_SECRET}
+    
+house:
+  data:
+    csv-paths: /app/data/마포구_표제부.csv,/app/data/서대문구_표제부.csv
 
 logging:
   level:
