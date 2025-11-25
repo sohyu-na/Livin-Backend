@@ -26,10 +26,10 @@ public class HouseReview extends BaseEntity {
     @JoinColumn(name = "house_id", updatable = false, nullable = false)
     private House house;
 
-//    //FK : user_id
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", updatable = false, nullable = false)
-//    private User user;
+    //FK : user_id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", updatable = false, nullable = false)
+    private User user;
 
     // 시설 평가
     @Enumerated(EnumType.STRING)
