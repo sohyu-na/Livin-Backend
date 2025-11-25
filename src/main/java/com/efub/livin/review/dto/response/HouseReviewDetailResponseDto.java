@@ -21,12 +21,12 @@ public class HouseReviewDetailResponseDto {
     private AccessRate accessRate;
     private String review;
     private List<String> imageUrls;
+    private String nickname;
 
     public static HouseReviewDetailResponseDto from(HouseReview entity) {
         return HouseReviewDetailResponseDto.builder()
                 .id(entity.getId())
 
-                // ⭐ Review → House 엔티티 통해 건물 정보 가져오기
                 .houseName(entity.getHouse().getBuildingName())
 
                 .finalRate(entity.getFinalRate())
@@ -38,6 +38,9 @@ public class HouseReviewDetailResponseDto {
                 .bugRate(entity.getBugRate())
 
                 .review(entity.getReview())
+                .nickname(entity.getAnonym() != null && entity.getAnonym()
+                        ? "익명"
+                        : entity.getUser().getNickname())
 
                 .imageUrls(
                         entity.getImages().stream()
