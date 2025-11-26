@@ -52,7 +52,15 @@ public class HouseController {
             @RequestParam(value = "page") int page,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        HousePagingListResponse response = houseService.search(keyword, sort, type, address, page, userDetails.getUser());
+        HousePagingListResponse response = houseService.search(keyword, sort, type, address, page, userDetails.getUserId());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    // 자취/하숙 인기순 top5
+    // GET /house/top
+    @GetMapping(value = "/top")
+    public ResponseEntity<HousePagingListResponse> getTop5List(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        HousePagingListResponse response = houseService.getTop5ByBookmark(userDetails.getUserId());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
