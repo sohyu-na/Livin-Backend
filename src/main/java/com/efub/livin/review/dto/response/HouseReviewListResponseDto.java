@@ -20,6 +20,7 @@ public class HouseReviewListResponseDto {
     private BugRate bugRate;
     private AccessRate accessRate;
     private List<String> imageUrls;
+    private String nickname;
 
     public static HouseReviewListResponseDto from(HouseReview entity){
         return HouseReviewListResponseDto.builder()
@@ -30,6 +31,9 @@ public class HouseReviewListResponseDto {
                 .accessRate(entity.getAccessRate())
                 .soundRate(entity.getSoundRate())
                 .bugRate(entity.getBugRate())
+                .nickname(entity.getAnonym() != null && entity.getAnonym()
+                        ? "익명"
+                        : entity.getUser().getNickname())
                 .imageUrls(
                         entity.getImages().stream()
                                 .map(ReviewImage::getImagePath)

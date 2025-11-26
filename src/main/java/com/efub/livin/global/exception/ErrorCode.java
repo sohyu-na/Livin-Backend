@@ -17,6 +17,7 @@ public enum ErrorCode {
     // 인증 관련
     USER_NOT_FOUND(404, "존재하지 않는 사용자입니다."),
     INVALID_TOKEN(401, "유효하지 않는 토큰입니다."),
+    ACCESS_DENIED(402, "리뷰를 작성한 사람만 삭제할 수 있습니다."),
 
     // House 저장 관련
     KAKAO_API_ERROR(500, "카카오 API 연동 중 오류가 발생했습니다."),

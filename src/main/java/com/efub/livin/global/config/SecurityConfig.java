@@ -68,7 +68,8 @@ public class SecurityConfig {
                                 "/users/verify-email",
                                 "/users/signup/password",// 회원가입 허용
                                 "/auth/login",  // 로그인 허용
-                                "/auth/token"  // if. 토큰 재발급
+                                "/auth/token",   // if. 토큰 재발급
+                                "/review/images"  // 리뷰 이미지 등록
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
