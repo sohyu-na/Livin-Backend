@@ -32,7 +32,7 @@ public class HouseService {
     private final MapService mapService;
 
     private static final int house_list_size = 20;  // 임시로 20개 설정. 추후 프론트와 연동해보며 조절 예정
-    private static final int bookmark_list_size = 10;
+    private static final int top_list_size = 5; // 인기순에서 보여질 데이터 개수
 
     // 새 자취/하숙 정보 등록
     @Transactional
@@ -61,36 +61,52 @@ public class HouseService {
     @Transactional(readOnly = true)
     public HousePagingListResponse search(
             String keyword, // null 가능
-            String sort,    // review(default), bookmark
+            String sort,    // review(default - 별점순), bookmark
             String type,    // all(default), private, boarding
             String address, // all(default), 서대문구, 마포구, 종로구, 중구, 은평구, 용산구
             int page,
-            User user
+            Long userId
     ) {
         // 페이징을 반영한 검색
         Pageable pageable = PageRequest.of(page, house_list_size);
         HouseType houseType = parseHouseType(type);
         Page<House> searchHouses = houseRepository.search(keyword, sort, houseType, address, pageable);
 
+        List<HouseResponse> houseListWithBookmark = toHouseResponsesWithBookmark(searchHouses, userId);
+
+        return new HousePagingListResponse(searchHouses, houseListWithBookmark);
+    }
+
+    // 자취/하숙 인기순 top5 조회
+    @Transactional(readOnly = true)
+    public HousePagingListResponse getTop5ByBookmark(Long userId) {
+        Pageable pageable = PageRequest.of(0, top_list_size);
+        Page<House> searchHouses = houseRepository.search(null, "bookmark", null, null, pageable);
+
+        List<HouseResponse> houseListWithBookmark = toHouseResponsesWithBookmark(searchHouses, userId);
+
+        return new HousePagingListResponse(searchHouses, houseListWithBookmark);
+    }
+
+    // Page<House> 에서 북마크 정보 반영한 dto list로 변환 함수
+    private List<HouseResponse> toHouseResponsesWithBookmark(Page<House> houses, Long userId) {
         // houseId 리스트만 뽑기
-        List<Long> houseIds = searchHouses.getContent().stream()
+        List<Long> houseIds = houses.getContent().stream()
                 .map(House::getHouseId)
-                .collect(Collectors.toList());
+                .toList();
 
         // 유저가 북마크한 리스트 id 조회
-        Set<Long> bookmarkedSet = new HashSet<>(
-                bookmarkRepository.findBookmarkedIdsIn(user.getUserId(), houseIds)
-        );
+        Set<Long> bookmarkedSet = houseIds.isEmpty()
+                ? Set.of()
+                : new HashSet<>(bookmarkRepository.findBookmarkedIdsIn(userId, houseIds));
 
         // 북마크 정보 반영한 dto list 생성
-        List<HouseResponse> content = searchHouses.getContent().stream()
+        return houses.getContent().stream()
                 .map(house -> HouseResponse.from(
                         house,
                         bookmarkedSet.contains(house.getHouseId())
                 ))
                 .toList();
-
-        return new HousePagingListResponse(searchHouses, content);
     }
 
     // 자취/하숙 및 근처 편의시설 조회
