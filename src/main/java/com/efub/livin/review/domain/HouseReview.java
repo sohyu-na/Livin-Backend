@@ -75,7 +75,8 @@ public class HouseReview extends BaseEntity {
                        BugRate bugRate,
                        Integer finalRate,
                        String review,
-                       Boolean anonym) {
+                       Boolean anonym,
+                       User user) {
         this.house = house;
         this.facilityRate = facilityRate;
         this.accessRate = accessRate;
@@ -84,6 +85,7 @@ public class HouseReview extends BaseEntity {
         this.finalRate = finalRate;
         this.review = review;
         this.anonym = anonym;
+        this.user = user;
     }
 
     //이미지 추가하는 메서드

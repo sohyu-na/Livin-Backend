@@ -12,6 +12,7 @@ public interface DormReviewRepository extends JpaRepository<DormReview, Long> {
     @Query("""
         SELECT d
         FROM DormReview d
+        JOIN FETCH d.user
         WHERE (:buildName IS NULL OR d.buildName LIKE CONCAT('%', :buildName, '%'))
           AND (:buildNum IS NULL OR d.buildNum = :buildNum)
           AND (:minFinalRate IS NULL OR d.finalRate >= :minFinalRate)
