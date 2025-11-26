@@ -10,6 +10,8 @@ import com.efub.livin.review.dto.request.HouseReviewCreateRequestDto;
 import com.efub.livin.review.dto.response.HouseReviewDetailResponseDto;
 import com.efub.livin.review.dto.response.HouseReviewListResponseDto;
 import com.efub.livin.review.repository.HouseReviewRepository;
+import com.efub.livin.user.domain.User;
+import com.efub.livin.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,14 +23,18 @@ import java.util.List;
 public class HouseReviewService {
     private final HouseReviewRepository houseReviewRepository;
     private final HouseSaveRepository houseSaveRepository;
+    private final UserRepository userRepository;
 
     //리뷰 생성
     @Transactional
-    public Long createHouseReview(Long houseId, HouseReviewCreateRequestDto request){
+    public Long createHouseReview(Long houseId, HouseReviewCreateRequestDto request, Long loginUserId){
         House house = houseSaveRepository.findById(houseId)
                 .orElseThrow(()-> new CustomException(ErrorCode.HOUSE_NOT_FOUND));
 
-        HouseReview review = request.toEntitiy(house);
+        User user = userRepository.findById(loginUserId)
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        HouseReview review = request.toEntitiy(house, user);
 
         if(request.getImageUrls() != null){
             request.getImageUrls().forEach(url -> {
@@ -60,9 +66,13 @@ public class HouseReviewService {
 
     //리뷰 삭제
     @Transactional
-    public void deleteHouseReview(Long id){
+    public void deleteHouseReview(Long id, Long loginUserId){
         HouseReview review = houseReviewRepository.findById(id)
                 .orElseThrow(()-> new CustomException(ErrorCode.HOUSE_REVIEW_NOT_FOUND));
+
+        if(!review.getUser().getUserId().equals(loginUserId)){
+            throw new CustomException(ErrorCode.ACCESS_DENIED);
+        }
         houseReviewRepository.delete(review);
     }
 }

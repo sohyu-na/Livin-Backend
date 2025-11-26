@@ -19,12 +19,12 @@ public class ReviewImage extends BaseEntity {
     //이미지 URL
     private String imagePath;
 
-    // ★ 기숙사 리뷰 쪽 FK
+    // 기숙사 리뷰 쪽 FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dorm_review_id")
     private DormReview dormReview;
 
-    // ★ 자취/하숙 리뷰 쪽 FK
+    // 자취/하숙 리뷰 쪽 FK
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "house_review_id")
     private HouseReview houseReview;
