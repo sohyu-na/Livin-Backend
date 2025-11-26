@@ -10,6 +10,7 @@ import com.efub.livin.bookmark.repository.BookmarkRepository;
 import com.efub.livin.house.repository.HouseRepository;
 import com.efub.livin.user.domain.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class BookmarkService {
 
@@ -31,14 +33,21 @@ public class BookmarkService {
 
         Bookmark bookmark = bookmarkRepository.findByUserAndHouse(user, house)
                 .orElse(null);
+        if(bookmark != null){
+            log.info("bookmark id : {}", bookmark.getId());
+        }
         if(bookmark == null){
+            log.info("bookmark add");
             Bookmark saved = bookmarkRepository.save(Bookmark.builder()
                     .user(user)
                     .house(house)
                     .build());
+            houseRepository.increaseBookmarkCount(house.getHouseId());
             return new BookmarkResponse(true, saved.getId());
         } else {
             bookmarkRepository.delete(bookmark);
+            log.info("bookmark delete");
+            houseRepository.decreaseBookmarkCount(house.getHouseId());
             return new BookmarkResponse(false, null);
         }
     }
