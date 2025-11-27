@@ -1,4 +1,4 @@
-package com.efub.livin.comment.dto;
+package com.efub.livin.comment.dto.response;
 
 import com.efub.livin.comment.domain.Comment;
 import com.fasterxml.jackson.annotation.JsonFormat;
