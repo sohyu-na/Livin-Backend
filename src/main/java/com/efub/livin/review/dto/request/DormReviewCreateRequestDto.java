@@ -38,6 +38,7 @@ public class DormReviewCreateRequestDto {
                 .finalRate(finalRate)
                 .review(review)
                 .anonym(anonym)
+                .user(user)
                 .build();
     }
 }

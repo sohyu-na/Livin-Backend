@@ -31,6 +31,7 @@ public class HouseReviewCreateRequestDto {
                 .finalRate(finalRate)
                 .review(review)
                 .anonym(anonym)
+                .user(user)
                 .build();
     }
 
