@@ -68,7 +68,7 @@ public class DormReviewService {
         CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
         Long currentUserId = principal.getUserId();
 
-        List<DormReview> reviews = dormReviewRepository.findByUserIdOrderByCreatedAtDesc(currentUserId);
+        List<DormReview> reviews = dormReviewRepository.findByUser_UserIdOrderByCreatedAtDesc(currentUserId);
 
         return reviews.stream().map(DormReviewListResponseDto::from).toList();
     }
