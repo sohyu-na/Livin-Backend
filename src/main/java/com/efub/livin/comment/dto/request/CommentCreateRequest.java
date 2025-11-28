@@ -1,4 +1,4 @@
-package com.efub.livin.comment.dto;
+package com.efub.livin.comment.dto.request;
 
 import com.efub.livin.comment.domain.Comment;
 import com.efub.livin.review.domain.DormReview;

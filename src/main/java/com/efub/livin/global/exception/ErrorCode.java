@@ -30,6 +30,7 @@ public enum ErrorCode {
     //리뷰 관련
     HOUSE_REVIEW_NOT_FOUND(404, "해당 자취/하숙 리뷰를 찾을 수 없습니다."),
     DORM_REVIEW_NOT_FOUND(404, "해당 기숙사 리뷰를 찾을 수 없습니다."),
+    REVIEW_NOT_FOUND(404, "해당 리뷰를 찾을 수 없습니다."),
 
     // 댓글 관련
     COMMENT_NOT_FOUND(404, "해당 댓글을 찾을 수 없습니다."),
