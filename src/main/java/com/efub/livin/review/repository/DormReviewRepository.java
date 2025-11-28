@@ -25,5 +25,5 @@ public interface DormReviewRepository extends JpaRepository<DormReview, Long> {
     );
 
     // 자신의 리뷰를 조회할 떄 사용
-    List<DormReview> findByUserIdOrderByCreatedAtDesc(Long userId);
+    List<DormReview> findByUser_UserIdOrderByCreatedAtDesc(Long userId);
 }
