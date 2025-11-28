@@ -1,5 +1,6 @@
 package com.efub.livin.review.service;
 
+import com.efub.livin.auth.domain.CustomUserDetails;
 import com.efub.livin.global.exception.CustomException;
 import com.efub.livin.global.exception.ErrorCode;
 import com.efub.livin.review.domain.DormReview;
@@ -11,6 +12,8 @@ import com.efub.livin.review.repository.DormReviewRepository;
 import com.efub.livin.user.domain.User;
 import com.efub.livin.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +58,19 @@ public class DormReviewService {
         return reviews.stream()
                 .map(DormReviewListResponseDto::from)
                 .toList();
+    }
+
+    // 내 리뷰만 조회
+    @Transactional(readOnly = true)
+    public List<DormReviewListResponseDto> getMyDormReviewList() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        Long currentUserId = principal.getUserId();
+
+        List<DormReview> reviews = dormReviewRepository.findByUserIdOrderByCreatedAtDesc(currentUserId);
+
+        return reviews.stream().map(DormReviewListResponseDto::from).toList();
     }
 
     //리뷰 상세 조회
