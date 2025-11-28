@@ -40,6 +40,12 @@ public class DormReviewController {
         return ResponseEntity.ok(list);
     }
 
+    //내 리뷰 조회
+    @GetMapping("/me")
+    public ResponseEntity<List<DormReviewListResponseDto>> getMyDormReviewList() {
+        return ResponseEntity.ok(dormReviewService.getMyDormReviewList());
+    }
+
     //리뷰 상세 조회
     @GetMapping("/{id}")
     public ResponseEntity<DormReviewDetailResponseDto> getDormReviewDetail(

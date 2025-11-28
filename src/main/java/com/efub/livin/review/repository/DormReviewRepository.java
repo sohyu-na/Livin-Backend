@@ -23,4 +23,7 @@ public interface DormReviewRepository extends JpaRepository<DormReview, Long> {
             @Param("buildNum") String buildNum,
             @Param("minFinalRate") Integer minFinalRate
     );
+
+    // 자신의 리뷰를 조회할 떄 사용
+    List<DormReview> findByUserIdOrderByCreatedAtDesc(Long userId);
 }
