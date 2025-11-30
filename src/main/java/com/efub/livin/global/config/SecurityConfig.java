@@ -42,6 +42,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://liv-in.vercel.app");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
 
