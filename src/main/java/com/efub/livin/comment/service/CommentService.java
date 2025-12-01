@@ -53,7 +53,7 @@ public class CommentService {
         } else {
             // 자취/하숙 리뷰의 댓글
             HouseReview houseReview = houseReviewRepository.findById(reviewId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.HOUSE_NOT_FOUND));
+                    .orElseThrow(() -> new CustomException(ErrorCode.HOUSE_REVIEW_NOT_FOUND));
 
             comment = request.toEntity(user, houseReview);
         }
@@ -66,16 +66,23 @@ public class CommentService {
     // 리뷰의 댓글 조회
     @Transactional(readOnly = true)
     public CommentListResponse getReviewComments(User user, Long reviewId){
-        // 리뷰 유효 검사
-        if (!(dormReviewRepository.existsById(reviewId)) || houseReviewRepository.existsById(reviewId)) {
-            throw new CustomException(ErrorCode.REVIEW_NOT_FOUND);
-        }
 
         // 기숙사 리뷰에 대한 댓글
         List<Comment> comments;
         if (reviewId >= DORM_REVIEW_START_ID) {
+            // 기숙사 리뷰 유효 검사
+            if (!dormReviewRepository.existsById(reviewId)) {
+                throw new CustomException(ErrorCode.DORM_REVIEW_NOT_FOUND);
+            }
+
             comments = commentRepository.findAllByDormReviewId(reviewId);
+
         } else { // 자취방 리뷰에 대한 댓글
+            // 자취방 리뷰 유효 검사
+            if (!houseReviewRepository.existsById(reviewId)) {
+                throw new CustomException(ErrorCode.HOUSE_REVIEW_NOT_FOUND);
+            }
+
             comments = commentRepository.findAllByHouseReviewId(reviewId);
         }
 
