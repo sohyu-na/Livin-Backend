@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.s3.endpoints.internal.BooleanEqualsFn;
 public class Comment extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
     private String content;
