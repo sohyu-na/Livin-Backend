@@ -4,11 +4,13 @@ import com.efub.livin.comment.domain.Comment;
 import com.efub.livin.review.domain.DormReview;
 import com.efub.livin.review.domain.HouseReview;
 import com.efub.livin.user.domain.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentCreateRequest {
 
     private String content;
