@@ -2,7 +2,7 @@ package com.efub.livin.house.service;
 
 import com.efub.livin.global.exception.CustomException;
 import com.efub.livin.global.exception.ErrorCode;
-import com.efub.livin.house.domain.Document;
+import com.efub.livin.house.dto.response.Document;
 import com.efub.livin.house.domain.House;
 import com.efub.livin.house.domain.HouseType;
 import com.efub.livin.house.dto.response.*;
@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

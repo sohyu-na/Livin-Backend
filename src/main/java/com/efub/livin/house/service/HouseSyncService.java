@@ -3,7 +3,7 @@ package com.efub.livin.house.service;
 import com.efub.livin.house.domain.HouseType;
 import com.efub.livin.house.dto.response.NaverImageResponseDto;
 import lombok.RequiredArgsConstructor;
-import com.efub.livin.house.domain.Document;
+import com.efub.livin.house.dto.response.Document;
 import com.efub.livin.house.domain.House;
 import com.efub.livin.house.dto.response.KakaoResponseDto;
 import com.efub.livin.house.repository.HouseSaveRepository;
