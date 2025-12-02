@@ -4,10 +4,14 @@ import com.efub.livin.house.domain.House;
 import com.efub.livin.house.domain.HouseType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class HouseCreateRequest {
 
